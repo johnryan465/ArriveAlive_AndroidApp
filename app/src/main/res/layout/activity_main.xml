@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+
+
+    <AutoCompleteTextView
+        android:id="@+id/Start"
+        android:hint="Start"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+    <AutoCompleteTextView
+        android:id="@+id/Destination"
+        android:hint="Destination"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:onClick="getRouteHandler"
+        android:id="@+id/button" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="From my location"
+        android:id="@+id/checkBox"
+        android:layout_toEndOf="@+id/button"
+        android:layout_toRightOf="@+id/button"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            android:id="@+id/button2"
+            android:onClick="clear"
+            android:layout_alignParentRight="true"            />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=""
+        android:id="@+id/textView"
+        android:maxLines = "4"
+        android:scrollbars = "vertical"/>
+
+    <org.osmdroid.views.MapView android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+</LinearLayout>

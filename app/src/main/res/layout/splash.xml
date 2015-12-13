@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#44CCFF"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/white"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Drive Safely"
+        android:id="@+id/textView2"
+        android:layout_gravity="center_horizontal"
+        android:textSize="35sp"
+        android:layout_marginBottom="131dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView android:id="@+id/splashscreen" android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:src="@drawable/splash"
+        android:layout_gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
