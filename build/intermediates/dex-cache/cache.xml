@@ -37,18 +37,18 @@
         <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-1cd1039154f1bb9cc0d4a9da3e8b7ec509fd8b06.jar" />
     </item>
     <item
-        jar="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/exploded-aar/RoadBlackSpots/oSMBonusPack/unspecified/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="c63c6b9a3e2daf4d3519e2cab12c1e325c9f4372">
-        <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/classes-2d0503cec4177e197049d99fa534be3183ca1b63.jar" />
-    </item>
-    <item
         jar="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
         <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-5e4bc5167242df73addf479835ea8bcee8395f98.jar" />
+    </item>
+    <item
+        jar="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/exploded-aar/RoadBlackSpots/oSMBonusPack/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="07b433a78a101e667feb8733522ce1f40e28bbac">
+        <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/classes-2d0503cec4177e197049d99fa534be3183ca1b63.jar" />
     </item>
     <item
         jar="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/exploded-aar/RoadBlackSpots/oSMBonusPack/unspecified/libs/commons-lang3-3.3.2.jar"
