@@ -127,7 +127,7 @@ public class RoutePlanner extends ActionBarActivity {
             }
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String newText = s.toString();
-                new getJson().execute(newText);
+                new getJson().execute(newText,"Dest");
             }
         });
         textStart.addTextChangedListener(new TextWatcher() {
@@ -139,7 +139,7 @@ public class RoutePlanner extends ActionBarActivity {
             }
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String newText = s.toString();
-                new getJson().execute(newText);
+                new getJson().execute(newText,"Start");
             }
         });
         geocoder = new GeocoderPhoton(new Activity());
@@ -283,6 +283,7 @@ public class RoutePlanner extends ActionBarActivity {
         @Override
         protected String doInBackground(String... key) {
             String newText = key[0];
+            final String whichEditTextBox = key[1];
             newText = newText.trim();
             newText = newText.replace(" ", "+");
             try{
@@ -309,8 +310,14 @@ public class RoutePlanner extends ActionBarActivity {
                 public void run(){
                     aAdapter = new ArrayAdapter<String>(getApplicationContext(), xyz.arrivealive.R.layout.item, suggest);
                     if(!aAdapter.equals(null)) {
-                        textStart.setAdapter(aAdapter);
-                        aAdapter.notifyDataSetChanged();
+                        if(whichEditTextBox == "Dest"){
+                            textDest.setAdapter(aAdapter);
+                            aAdapter.notifyDataSetChanged();
+                        }
+                        else if(whichEditTextBox == "Start") {
+                            textStart.setAdapter(aAdapter);
+                            aAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             });

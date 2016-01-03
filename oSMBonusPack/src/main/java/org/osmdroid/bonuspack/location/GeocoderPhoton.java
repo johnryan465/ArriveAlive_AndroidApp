@@ -67,55 +67,6 @@ public class GeocoderPhoton {
         gAddress.setLatitude(Double.parseDouble(coor[1]));
         gAddress.setLongitude(Double.parseDouble(coor[0]));
 
-        /*JsonObject jAddress = jResult.get("address").getAsJsonObject();
-
-        int addressIndex = 0;
-        if (jAddress.has("road")){
-            gAddress.setAddressLine(addressIndex++, jAddress.get("road").getAsString());
-            gAddress.setThoroughfare(jAddress.get("road").getAsString());
-        }
-        if (jAddress.has("suburb")){
-            //gAddress.setAddressLine(addressIndex++, jAddress.getString("suburb"));
-            //not kept => often introduce "noise" in the address.
-            gAddress.setSubLocality(jAddress.get("suburb").getAsString());
-        }
-        if (jAddress.has("postcode")){
-            gAddress.setAddressLine(addressIndex++, jAddress.get("postcode").getAsString());
-            gAddress.setPostalCode(jAddress.get("postcode").getAsString());
-        }
-
-        if (jAddress.has("city")){
-            gAddress.setAddressLine(addressIndex++, jAddress.get("city").getAsString());
-            gAddress.setLocality(jAddress.get("city").getAsString());
-        } else if (jAddress.has("town")){
-            gAddress.setAddressLine(addressIndex++, jAddress.get("town").getAsString());
-            gAddress.setLocality(jAddress.get("town").getAsString());
-        } else if (jAddress.has("village")){
-            gAddress.setAddressLine(addressIndex++, jAddress.get("village").getAsString());
-            gAddress.setLocality(jAddress.get("village").getAsString());
-        }
-
-        if (jAddress.has("county")){ //France: departement
-            gAddress.setSubAdminArea(jAddress.get("county").getAsString());
-        }
-        if (jAddress.has("state")){ //France: region
-            gAddress.setAdminArea(jAddress.get("state").getAsString());
-        }
-        if (jAddress.has("country")){
-            gAddress.setAddressLine(addressIndex++, jAddress.get("country").getAsString());
-            gAddress.setCountryName(jAddress.get("country").getAsString());
-        }
-        if (jAddress.has("country_code"))
-            gAddress.setCountryCode(jAddress.get("country_code").getAsString());
-        }
-		/* Other possible OSM tags in Nominatim results not handled yet:
-		 * subway, golf_course, bus_stop, parking,...
-		 * house, house_number, building
-		 * city_district (13e Arrondissement)
-		 * road => or highway, ...
-		 * sub-city (like suburb) => locality, isolated_dwelling, hamlet ...
-		 * state_district
-		*/
 
         //Add non-standard (but very useful) information in Extras bundle:
         Bundle extras = new Bundle();

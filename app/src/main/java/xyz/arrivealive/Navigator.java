@@ -2,12 +2,15 @@ package xyz.arrivealive;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,7 +23,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.api.IMapController;
 
 import org.osmdroid.bonuspack.location.GeocoderPhoton;
@@ -41,25 +44,34 @@ import org.osmdroid.bonuspack.routing.GraphHopperRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.bonuspack.routing.RoadNode;
+import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.DirectedLocationOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlay;
+import org.osmdroid.views.overlay.MyLocationOverlay;
 import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class Navigator extends ActionBarActivity {
+    private final static int INTERVAL = 1000;
+    Handler mHandler;
+    Runnable mHandlerTask;
     public String data;
     public List<String> suggest;
     public AutoCompleteTextView autoComplete;
     public ArrayAdapter<String> aAdapter;
     public Button clearButton;
-    public CheckBox check;
-    public AutoCompleteTextView textStart,textDest;
+    public AutoCompleteTextView textDest;
     public String destString,startString;
     public TextView directions;
     public static Road mRoad;
@@ -70,41 +82,42 @@ public class Navigator extends ActionBarActivity {
     public ArrayList<GeoPoint> waypoints;
     public RoadManager roadManager;
     public GeocoderPhoton geocoder;
+    public GeoPoint currentLocation;
+    public LocationListener locationListener;
+    public OverlayItem myCurrentLocationOverlayItem;
+    public ItemizedOverlay currentLocationOverlay;
+    public Drawable myCurrentLocationMarker;
+    public int currpoint;
+    public TextToSpeech ttobj;
+    public int MapOverlayIndex = -1;
+    IMapController mapController;
+    LocationManager locationManager;
+    ArrayList<OverlayItem> overlayItemArray;
 
     public double lat = -1.0,lon = -1.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(xyz.arrivealive.R.layout.activity_main);
-        textStart = (AutoCompleteTextView)findViewById(xyz.arrivealive.R.id.Start);
+        setContentView(R.layout.navigator);
         textDest   = (AutoCompleteTextView)findViewById(xyz.arrivealive.R.id.Destination);
         map = (MapView) findViewById(xyz.arrivealive.R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
-        IMapController mapController = map.getController();
+        //directions = findViewById(xyz.arrivealive.R.id.)
+        mapController = map.getController();
         mapController.setZoom(7);
         map.setMinZoomLevel(7);
+        myCurrentLocationMarker = this.getResources().getDrawable(R.drawable.current);
+        DefaultResourceProxyImpl defaultResourceProxyImpl
+                = new DefaultResourceProxyImpl(this);
+        //ItemizedIconOverlay myItemizedIconOverlay
+        //        = new ItemizedIconOverlay(
+        //        overlayItemArray, null, defaultResourceProxyImpl);
+        //map.getOverlays().add(myItemizedIconOverlay);
         startPoint = new GeoPoint(52.752, -7.953);
         mapController.setCenter(startPoint);
-        directions = (TextView)findViewById(xyz.arrivealive.R.id.textView);
-        clearButton = (Button)findViewById(xyz.arrivealive.R.id.button2);
-        clearButton.setVisibility(View.GONE);
-        directions.setVisibility(View.GONE);
-        directions.setMovementMethod(new ScrollingMovementMethod());
-        check = (CheckBox)findViewById(xyz.arrivealive.R.id.checkBox);
-        check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //is chkIos checked?
-                if ((check).isChecked()) {
-                    textStart.setVisibility(View.GONE);
-                } else {
-                    textStart.setVisibility(View.VISIBLE);
-                }
-            }
-        });
         suggest = new ArrayList<String>();
         textDest.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable editable) {
@@ -118,19 +131,30 @@ public class Navigator extends ActionBarActivity {
                 new getJson().execute(newText);
             }
         });
-        textStart.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable editable) {
-                // TODO Auto-generated method stub
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // TODO Auto-generated method stub
-            }
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String newText = s.toString();
-                new getJson().execute(newText);
-            }
-        });
+        locationListener = new MyLocationListener();
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if( location != null ) {
+            currentLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
+        }
         geocoder = new GeocoderPhoton(new Activity());
+        ttobj=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+            }
+        }
+        );
+        mHandler = new Handler();
+        mHandlerTask = new Runnable()
+        {
+            @Override
+            public void run() {
+                turnbyturn();
+                mHandler.postDelayed(mHandlerTask, INTERVAL);
+            }
+        };
+        ttobj.setLanguage(Locale.UK);
     }
 
     @Override
@@ -177,11 +201,16 @@ public class Navigator extends ActionBarActivity {
             mapOverlays.add(mRoadOverlay);
             for (int i=0; i< mRoad.mNodes.size(); i++){
                 RoadNode node = mRoad.mNodes.get(i);
-                directions.append(i + 1 + ":" + node.mInstructions.toString() + '\n');
+                Log.d("Content", node.mLocation.toString());
+
+                //directions.append(i + 1 + ":" + node.mInstructions.toString() + '\n');
             }
-            directions.setVisibility(View.VISIBLE);
-            clearButton.setVisibility(View.VISIBLE);
+            Toast.makeText(context, "Route Recieved ", Toast.LENGTH_LONG).show();
+            mapController.setZoom(15);
+            mapController.animateTo((mRoad.mNodes.get(0).mLocation));
+            currpoint = 0;
             map.invalidate();
+            startRepeatingTask();
         }
     }
     private class getRoadTask extends AsyncTask<Object, Void, ArrayList> {
@@ -194,14 +223,11 @@ public class Navigator extends ActionBarActivity {
 
         protected void onPreExecute() {
             destString = textDest.getText().toString();
-            startString = textStart.getText().toString();
             Toast.makeText(context, destString, Toast.LENGTH_SHORT).show();
-            if((check).isChecked()){
-                point1 = _getLocation();
-                if(point1.getLatitude() == -1.0 && point1.getLatitudeE6() == -1.0) {
-                    Toast.makeText(context, "Failed to get GPS", Toast.LENGTH_SHORT).show();
-                    valid = false;
-                }
+            point1 = _getLocation();
+            if(point1.getLatitude() == -1.0 && point1.getLatitudeE6() == -1.0) {
+                Toast.makeText(context, "Failed to get GPS", Toast.LENGTH_SHORT).show();
+                valid = false;
             }
         }
         protected ArrayList doInBackground(Object... params){
@@ -209,7 +235,6 @@ public class Navigator extends ActionBarActivity {
                 List<Address> destBuffer1 = new ArrayList<>();
                 List<Address> destBuffer2 = new ArrayList<>();
                 try {
-                    destBuffer1 = geocoder.getFromLocationName(startString, 1);
                     destBuffer2 = geocoder.getFromLocationName(destString, 1);
                 } catch (IOException ie) {
                     return null;
@@ -239,8 +264,8 @@ public class Navigator extends ActionBarActivity {
         new getRoadTask(this).execute();
     }
     public void clear(View view) {
-        directions.setText("");
-        directions.setVisibility(View.GONE);
+        //directions.setText("");
+        //directions.setVisibility(View.GONE);
         clearButton.setVisibility(View.GONE);
     }
     private GeoPoint _getLocation() {
@@ -297,7 +322,7 @@ public class Navigator extends ActionBarActivity {
                 public void run(){
                     aAdapter = new ArrayAdapter<String>(getApplicationContext(), xyz.arrivealive.R.layout.item, suggest);
                     if(!aAdapter.equals(null)) {
-                        textStart.setAdapter(aAdapter);
+                        textDest.setAdapter(aAdapter);
                         aAdapter.notifyDataSetChanged();
                     }
                 }
@@ -306,4 +331,72 @@ public class Navigator extends ActionBarActivity {
         }
 
     }
+    public class MyLocationListener implements LocationListener {
+
+        public void onLocationChanged(Location location) {
+            currentLocation = new GeoPoint(location);
+            mapController.animateTo(currentLocation);
+            displayMyCurrentLocationOverlay();
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+    }
+    public void displayMyCurrentLocationOverlay(){
+        Marker startMarker = new Marker(map);
+        startMarker.setIcon(this.getResources().getDrawable(R.drawable.current));
+        startMarker.setPosition(currentLocation);
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        if(MapOverlayIndex != -1) {
+            map.getOverlays().remove(MapOverlayIndex);
+        }
+        map.getOverlays().add(startMarker);
+        MapOverlayIndex = map.getOverlays().size() - 1;
+        map.invalidate();
+    }
+
+
+    void startRepeatingTask()
+    {
+        mHandlerTask.run();
+    }
+
+    void stopRepeatingTask()
+    {
+        mHandler.removeCallbacks(mHandlerTask);
+    }
+    void turnbyturn() {
+        if(currpoint == mRoad.mNodes.size()){
+            stopRepeatingTask();
+        }
+        if(near(mRoad.mNodes.get(currpoint))){
+            ttobj.speak(mRoad.mNodes.get(currpoint).mInstructions, TextToSpeech.QUEUE_FLUSH, null);
+            currpoint += 1;
+        }
+    }
+    boolean near(RoadNode rn){
+        Location locationA = new Location("point A");
+
+        locationA.setLatitude(rn.mLocation.getLatitude());
+        locationA.setLongitude(rn.mLocation.getLongitude());
+
+        Location locationB = new Location("point B");
+
+        locationB.setLatitude(currentLocation.getLatitude());
+        locationB.setLongitude(currentLocation.getLongitude());
+
+        float distance = locationA.distanceTo(locationB);
+        Log.d("content", String.valueOf(distance));
+        if(distance < 30){
+            return true;
+        }
+        return false;
+    }
+
 }

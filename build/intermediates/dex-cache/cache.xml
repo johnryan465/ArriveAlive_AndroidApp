@@ -2,67 +2,67 @@
 <items version="2" >
 
     <item
-        jar="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/classes-d361bbcaee5aa0f4a73adb812023af32859df461.jar" />
-    </item>
-    <item
-        jar="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/classes-8a26538cf6767a76a27a62d289d5e943a75e81e1.jar" />
-    </item>
-    <item
-        jar="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/exploded-aar/RoadBlackSpots/oSMBonusPack/unspecified/libs/slf4j-android-1.5.8.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="404eece4bb07ea211f5a879c22458775c612f0df">
-        <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/slf4j-android-1.5.8-e7acd729a5ba7f84add57868b458aa9e37a8d66e.jar" />
-    </item>
-    <item
-        jar="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/exploded-aar/RoadBlackSpots/oSMBonusPack/unspecified/libs/osmdroid-android-4.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="2fcf7bc3cb27daa6e67c8990ea418d19f6b5b296">
-        <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/osmdroid-android-4.3-784d96983f2e6193805ae5aa834551026a83d763.jar" />
-    </item>
-    <item
         jar="/opt/android-sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-1cd1039154f1bb9cc0d4a9da3e8b7ec509fd8b06.jar" />
+        <dex dex="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-1cd1039154f1bb9cc0d4a9da3e8b7ec509fd8b06.jar" />
     </item>
     <item
-        jar="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jar="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/exploded-aar/RoadBlackSpots/oSMBonusPack/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-5e4bc5167242df73addf479835ea8bcee8395f98.jar" />
+        sha1="79088450ae324bddc286caf241b51f5370acd2b1">
+        <dex dex="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/classes-3db71aa06c3ecb0157153c10c8e07b8a75c923f6.jar" />
     </item>
     <item
-        jar="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/exploded-aar/RoadBlackSpots/oSMBonusPack/unspecified/classes.jar"
+        jar="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/exploded-aar/RoadBlackSpots/oSMBonusPack/unspecified/libs/osmdroid-android-4.3.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="07b433a78a101e667feb8733522ce1f40e28bbac">
-        <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/classes-2d0503cec4177e197049d99fa534be3183ca1b63.jar" />
+        sha1="2fcf7bc3cb27daa6e67c8990ea418d19f6b5b296">
+        <dex dex="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/osmdroid-android-4.3-3599235f4b0f7f258e6aefaf6e8d9b546f07b3b5.jar" />
     </item>
     <item
-        jar="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/exploded-aar/RoadBlackSpots/oSMBonusPack/unspecified/libs/commons-lang3-3.3.2.jar"
+        jar="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/classes-67cd8adce590466380251d64248e384401825cd8.jar" />
+    </item>
+    <item
+        jar="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/exploded-aar/RoadBlackSpots/oSMBonusPack/unspecified/libs/slf4j-android-1.5.8.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="404eece4bb07ea211f5a879c22458775c612f0df">
+        <dex dex="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/slf4j-android-1.5.8-370350308812984a42ccc1849aaee82acda0cb4a.jar" />
+    </item>
+    <item
+        jar="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/exploded-aar/RoadBlackSpots/oSMBonusPack/unspecified/libs/commons-lang3-3.3.2.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="659861b4acde07a0527211e40d256119face1d15">
-        <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/commons-lang3-3.3.2-08c184c94b1433a92cd4338b4c79417b22787088.jar" />
+        <dex dex="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/commons-lang3-3.3.2-18adc893a70b841bb1f0c100098575330f3f54e9.jar" />
+    </item>
+    <item
+        jar="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-caadcac5dd5e44aa3c1cc9011bb74cad2a54e49e.jar" />
+    </item>
+    <item
+        jar="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/classes-43ef2e62014fd7506bdcbb158b6216b065689a10.jar" />
     </item>
     <item
         jar="/home/john/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.2.4/a60a5e993c98c864010053cb901b7eab25306568/gson-2.2.4.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="a60a5e993c98c864010053cb901b7eab25306568">
-        <dex dex="/home/john/Code/ArriveAlive/app/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/gson-2.2.4-ca0d0cd4312c3fb324657b91f630fd3db9796a97.jar" />
+        <dex dex="/home/john/Code/ArriveAlive/RoadBlackSpots/app/build/intermediates/pre-dexed/debug/gson-2.2.4-ca0d0cd4312c3fb324657b91f630fd3db9796a97.jar" />
     </item>
 
 </items>
