@@ -59,51 +59,56 @@ public class GeocoderPhoton {
     }
 
     protected Address buildAndroidAddress(JsonObject jResult) throws JsonSyntaxException {
-        String tmp = jResult.get("features").getAsJsonArray().get(0).getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").toString();
-        tmp = tmp.replaceAll("[\\[\\](){}]","");
-        String[] coor = tmp.split(",");
-        //Log.d(BonusPackHelper.LOG_TAG, (tmp.get("geometry")..toString()));
-        Address gAddress = new Address(mLocale);
-        gAddress.setLatitude(Double.parseDouble(coor[1]));
-        gAddress.setLongitude(Double.parseDouble(coor[0]));
+        try {
+            String tmp = jResult.get("features").getAsJsonArray().get(0).getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").toString();
+            tmp = tmp.replaceAll("[\\[\\](){}]", "");
+            String[] coor = tmp.split(",");
+            //Log.d(BonusPackHelper.LOG_TAG, (tmp.get("geometry")..toString()));
+            Address gAddress = new Address(mLocale);
+            gAddress.setLatitude(Double.parseDouble(coor[1]));
+            gAddress.setLongitude(Double.parseDouble(coor[0]));
 
 
-        //Add non-standard (but very useful) information in Extras bundle:
-        Bundle extras = new Bundle();
-        if (jResult.has("polygonpoints")){
-            JsonArray jPolygonPoints = jResult.get("polygonpoints").getAsJsonArray();
-            ArrayList<GeoPoint> polygonPoints = new ArrayList<GeoPoint>(jPolygonPoints.size());
-            for (int i=0; i<jPolygonPoints.size(); i++){
-                JsonArray jCoords = jPolygonPoints.get(i).getAsJsonArray();
-                double lon = jCoords.get(0).getAsDouble();
-                double lat = jCoords.get(1).getAsDouble();
-                GeoPoint p = new GeoPoint(lat, lon);
-                polygonPoints.add(p);
+            //Add non-standard (but very useful) information in Extras bundle:
+            Bundle extras = new Bundle();
+            if (jResult.has("polygonpoints")){
+                JsonArray jPolygonPoints = jResult.get("polygonpoints").getAsJsonArray();
+                ArrayList<GeoPoint> polygonPoints = new ArrayList<GeoPoint>(jPolygonPoints.size());
+                for (int i=0; i<jPolygonPoints.size(); i++){
+                    JsonArray jCoords = jPolygonPoints.get(i).getAsJsonArray();
+                    double lon = jCoords.get(0).getAsDouble();
+                    double lat = jCoords.get(1).getAsDouble();
+                    GeoPoint p = new GeoPoint(lat, lon);
+                    polygonPoints.add(p);
+                }
+                extras.putParcelableArrayList("polygonpoints", polygonPoints);
             }
-            extras.putParcelableArrayList("polygonpoints", polygonPoints);
-        }
-        if (jResult.has("boundingbox")){
-            JsonArray jBoundingBox = jResult.get("boundingbox").getAsJsonArray();
-            BoundingBoxE6 bb = new BoundingBoxE6(
-                    jBoundingBox.get(1).getAsDouble(), jBoundingBox.get(2).getAsDouble(),
-                    jBoundingBox.get(0).getAsDouble(), jBoundingBox.get(3).getAsDouble());
-            extras.putParcelable("boundingbox", bb);
-        }
-        if (jResult.has("osm_id")){
-            long osm_id = jResult.get("osm_id").getAsLong();
-            extras.putLong("osm_id", osm_id);
-        }
-        if (jResult.has("osm_type")){
-            String osm_type = jResult.get("osm_type").getAsString();
-            extras.putString("osm_type", osm_type);
-        }
-        if (jResult.has("display_name")){
-            String display_name = jResult.get("display_name").getAsString();
-            extras.putString("display_name", display_name);
-        }
-        gAddress.setExtras(extras);
+            if (jResult.has("boundingbox")){
+                JsonArray jBoundingBox = jResult.get("boundingbox").getAsJsonArray();
+                BoundingBoxE6 bb = new BoundingBoxE6(
+                        jBoundingBox.get(1).getAsDouble(), jBoundingBox.get(2).getAsDouble(),
+                        jBoundingBox.get(0).getAsDouble(), jBoundingBox.get(3).getAsDouble());
+                extras.putParcelable("boundingbox", bb);
+            }
+            if (jResult.has("osm_id")){
+                long osm_id = jResult.get("osm_id").getAsLong();
+                extras.putLong("osm_id", osm_id);
+            }
+            if (jResult.has("osm_type")){
+                String osm_type = jResult.get("osm_type").getAsString();
+                extras.putString("osm_type", osm_type);
+            }
+            if (jResult.has("display_name")){
+                String display_name = jResult.get("display_name").getAsString();
+                extras.putString("display_name", display_name);
+            }
+            gAddress.setExtras(extras);
 
-        return gAddress;
+            return gAddress;
+        }
+        catch(IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     /**
@@ -132,6 +137,8 @@ public class GeocoderPhoton {
             return list;
         } catch (JsonSyntaxException e) {
             throw new IOException();
+        } catch(IndexOutOfBoundsException i) {
+            return null;
         }
     }
     public List<Address> getFromLocationName(String locationName, int maxResults,

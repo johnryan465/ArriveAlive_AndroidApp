@@ -1,7 +1,9 @@
 package xyz.arrivealive;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Criteria;
@@ -71,9 +73,9 @@ public class RoutePlanner extends ActionBarActivity {
     public ArrayList<GeoPoint> waypoints;
     public RoadManager roadManager;
     public GeocoderPhoton geocoder;
-
+    public boolean checked;
     public double lat = -1.0,lon = -1.0;
-
+    public LocationManager locationManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +119,13 @@ public class RoutePlanner extends ActionBarActivity {
                 }
             }
         });
+        locationManager = (LocationManager)
+                getSystemService(LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+        }else{
+            showGPSDisabledAlertToUser();
+        }
         suggest = new ArrayList<String>();
         textDest.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable editable) {
@@ -205,8 +214,12 @@ public class RoutePlanner extends ActionBarActivity {
         }
 
         protected void onPreExecute() {
+            checked = (check).isChecked();
             destString = textDest.getText().toString();
             startString = textStart.getText().toString();
+            if(startString == ""){
+                startString = "a";
+            }
             Toast.makeText(context, destString, Toast.LENGTH_SHORT).show();
             if((check).isChecked()){
                 point1 = _getLocation();
@@ -221,12 +234,14 @@ public class RoutePlanner extends ActionBarActivity {
                 List<Address> destBuffer1 = new ArrayList<>();
                 List<Address> destBuffer2 = new ArrayList<>();
                 try {
-                    destBuffer1 = geocoder.getFromLocationName(startString, 1);
+                    if(!checked) {
+                        destBuffer1 = geocoder.getFromLocationName(startString, 1);
+                    }
                     destBuffer2 = geocoder.getFromLocationName(destString, 1);
                 } catch (IOException ie) {
                     return null;
                 }
-                if (point1 == null) {
+                if(!checked) {
                     point1 = new GeoPoint(destBuffer1.get(0).getLatitude(), destBuffer1.get(0).getLongitude());
                 }
                 point2 = new GeoPoint(destBuffer2.get(0).getLatitude(), destBuffer2.get(0).getLongitude());
@@ -324,5 +339,26 @@ public class RoutePlanner extends ActionBarActivity {
             return null;
         }
 
+    }
+    private void showGPSDisabledAlertToUser(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Goto Settings Page To Enable GPS",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(callGPSSettingIntent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 }
